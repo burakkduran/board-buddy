@@ -2,22 +2,24 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import Link from 'next/link';
+import Link from 'next/link'
 
-export default function Home() {
+export default function SignUp() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle>Welcome</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
+          <CardTitle>Create an account</CardTitle>
+          <CardDescription>Sign up to get started</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
             <div className="space-y-4">
+              <Input type="text" placeholder="User Name" />
               <Input type="email" placeholder="Email" />
               <Input type="password" placeholder="Password" />
-              <Button className="w-full">Sign In</Button>
+              <Input type="password" placeholder="Confirm Password" />
+              <Button className="w-full">Sign Up</Button>
             </div>
           </form>
           <Separator className="my-4" />
@@ -33,9 +35,9 @@ export default function Home() {
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-gray-500">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" className="text-blue-500 hover:underline">
-              Sign up
+            Already have an account?{' '}
+            <Link href="/" className="text-blue-500 hover:underline">
+              Sign in
             </Link>
           </p>
         </CardFooter>
