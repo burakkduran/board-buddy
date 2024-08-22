@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 export default function SignUp() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen">
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Create an account</CardTitle>
