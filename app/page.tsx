@@ -1,10 +1,54 @@
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import Link from 'next/link';
+"use client";
+
+import { useState } from "react";
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("Signed in successfully");
+      router.push("/home");
+    } catch (error) {
+      setError((error as Error).message);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      console.log("Signed in successfully");
+      router.push("/home");
+    } catch (error) {
+      setError((error as Error).message);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <Card className="w-[350px]">
@@ -13,15 +57,34 @@ export default function Home() {
           <CardDescription>Sign in to your account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSignIn}>
             <div className="space-y-4">
-              <Input type="email" placeholder="Email" />
-              <Input type="password" placeholder="Password" />
-              <Button className="w-full">Sign In</Button>
+              <Input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <Input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <Button className="w-full" type="submit">
+                Sign In
+              </Button>
             </div>
           </form>
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
           <Separator className="my-4" />
-          <Button variant="outline" className="w-full flex items-center justify-center gap-2">
+          <Button
+            variant="outline"
+            className="w-full flex items-center justify-center gap-2"
+            onClick={handleGoogleSignIn}
+          >
             <svg role="img" viewBox="0 0 24 24" width="18" height="18">
               <path
                 fill="currentColor"
@@ -33,7 +96,7 @@ export default function Home() {
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-gray-500">
-            Don&apos;t have an account?{' '}
+            Don&apos;t have an account?{" "}
             <Link href="/signup" className="text-blue-500 hover:underline">
               Sign up
             </Link>
@@ -41,5 +104,5 @@ export default function Home() {
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }
